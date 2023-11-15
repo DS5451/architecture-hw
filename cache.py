@@ -25,8 +25,8 @@ for index, value in enumerate(pageNum):
 # Now creating the cache function
 def CACHE(cache_data, n):
     N = n
-    hits = 0
     misses = 0
+    evictions = 0
     cache = {}
 
     for i in cache_data:
@@ -35,25 +35,28 @@ def CACHE(cache_data, n):
             if len(cache) == N:
                 delkey = random.choice(list(cache.keys()))
                 if delkey != i[0]:
-                    del cache[delkey]
-            cache[i[0]] = i[1]
-        else:
-            hits += 1
+                    evictions += 1
+                del cache[delkey]
+            cache[i[0]] = i[1]  
 
-    return [hits, misses]
+    return [misses, evictions]
+
+def CACHE_DI(cache_data, n):
+    return []
 
 # Testing function
-results_hits = {}
 results_misses = {}
+results_evictions = {}
+
 
 Nums = [8, 16, 32, 64, 128, 256, 512, 1024]
 for N in Nums:
     cacheCall = CACHE(cache_data, N)
-    results_hits[N] = cacheCall[0]
-    results_misses[N] = cacheCall[1]
+    results_misses[N] = cacheCall[0]
+    results_evictions[N] = cacheCall[1]
 
 # Writing results to a CSV file manually
 with open('cache_results3.csv', 'w') as f:
-    f.write('N,Hits,Misses\n')
+    f.write('N,Misses,Evictions\n')
     for N in Nums:
-        f.write(f'{N},{results_hits[N]},{results_misses[N]}\n')
+        f.write(f'{N},{results_misses[N]},{results_evictions[N]}\n')
